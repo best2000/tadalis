@@ -4,12 +4,12 @@ import os
 import shutil
 
 class Todo:
-    def __init__(self, title , date, notes, location, List, progress):
-        self.title = title
-        self.date = date
-        self.notes = notes
-        self.location = location
-        self.list = List
+    def __init__(self):
+        self.title = None
+        self.date = None
+        self.notes = None
+        self.location = None
+        #self.list = None
     def toJSON(self):
         return json.dumps(self, default=lambda o: o.__dict__, 
             sort_keys=True, indent=4)
@@ -18,16 +18,25 @@ class TodoManager:
     def __init__(self):
         self.selecttodo = None
     def addTodo(self):
-        pass
+        td = Todo()
+        td.title = input("td title:")
+        td.date = input("td date:")
+        td.notes = input("td notes:")
+        td.location = input("td location:")
+        with open('liss/'+ listitle + '/' + td.title + '.json', 'w') as lisf:
+            lisf.write(td.toJSON())
     def removeTodo(self):
-        pass    
+        try:
+            os.remove("liss/" + listitle + '/' + tdtitle + '.json')
+        except:
+            print("error!")
     def checkTodo(self):
         pass
 
 class List():
-    def __init__(self, title, color):
-        self.title = title
-        self.color = color
+    def __init__(self):
+        self.title = None
+        self.color = None
         self.manager = lisman
     def toJSON(self):
         return json.dumps(self, default=lambda o: o.__dict__, 
@@ -37,7 +46,7 @@ class ListManager():
     def __init__(self):
         self.selectlis = None 
     def createList(self):
-        lis = List("title", "color")
+        lis = List()
         lis.title = input('Title: ')
         lis.color = input('Color: ')
         os.mkdir('liss/' + lis.title)
@@ -69,15 +78,21 @@ while True:
         #show list info
         tddir = os.listdir('liss/'+listitle) 
         print(tddir)
-        cmd = input("waht u wanna do with list <dellis/showtd/addtd/deltd>:")
+        cmd = input("waht u wanna do with list <dellis/showtd/addtd/seltd>:")
         if cmd == 'showtd':
-            pass
+            todoman.checkTodo() #################
         elif cmd == 'dellis':
             lisman.deleteList()
         elif cmd == 'addtd':
-            pass
-        elif cmd == 'deltd':
-            pass
+            todoman.addTodo() ###################
+        elif cmd == 'seltd':
+            tdtitle = input("which td <title>:")
+            todoman.selecttodo = tdtitle 
+            cmd = input("waht u wanna do with td <deltd>:")
+            if cmd == 'deltd':
+                todoman.removeTodo() #################
+            else:
+                pass
         else:
             pass
 
@@ -86,7 +101,3 @@ while True:
     else:
         print('Command not found!!!')
         
-
-
-#jsere = me.toJSON()
-#print(jsere)
